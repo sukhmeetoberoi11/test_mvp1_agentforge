@@ -1,0 +1,76 @@
+[
+  {
+    "type": "pii_detection",
+    "config": {
+      "action": "redact",
+      "method": "regex_plus_ner",
+      "scan_points": [
+        "ingestion",
+        "pre_emit"
+      ],
+      "entity_types": [
+        "SSN",
+        "CREDIT_CARD",
+        "PHONE",
+        "EMAIL",
+        "DATE_OF_BIRTH"
+      ],
+      "token_format": "[{PII_TYPE}_{INDEX}]",
+      "vault_enabled": true,
+      "replacement_strategy": "typed_token"
+    },
+    "enabled": true
+  },
+  {
+    "type": "toxicity_check",
+    "config": {
+      "action": "block",
+      "apply_to": [
+        "inbound_message",
+        "draft_response"
+      ],
+      "on_detect": "escalate_to_human",
+      "threshold": 0.75,
+      "categories": [
+        "hate_speech",
+        "harassment",
+        "discriminatory_language",
+        "prohibited_legal_commitments"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "type": "relevance_check",
+    "config": {
+      "action": "flag",
+      "apply_to": [
+        "draft_response"
+      ],
+      "reference": "retrieved_context",
+      "embedding_model": "text-embedding-3-small",
+      "on_low_confidence": "escalate_to_human",
+      "similarity_threshold": 0.6
+    },
+    "enabled": true
+  },
+  {
+    "type": "prompt_injection_check",
+    "config": {
+      "action": "block",
+      "apply_to": [
+        "inbound_message",
+        "tool_call_responses"
+      ],
+      "patterns": [
+        "ignore previous instructions",
+        "system prompt",
+        "jailbreak"
+      ],
+      "log_level": "critical",
+      "on_detect": "reject_and_log",
+      "detection_method": "pattern_plus_llm_judge"
+    },
+    "enabled": true
+  }
+]

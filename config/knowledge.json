@@ -1,0 +1,44 @@
+{
+  "enabled": true,
+  "indexing": {
+    "ttl_days": 90,
+    "index_resolved_tickets": true,
+    "pii_scrub_before_index": true
+  },
+  "retrieval": {
+    "top_k": 5,
+    "index_type": "hnsw",
+    "score_threshold": 0.6,
+    "payload_filtering_enabled": true
+  },
+  "chunk_size": 512,
+  "collections": {
+    "policy_documents": {
+      "description": "Internal compliance and response policy documents for compliance reviewer",
+      "metadata_filters": [
+        "policy_type",
+        "effective_date"
+      ]
+    },
+    "historical_tickets": {
+      "description": "Anonymized past ticket interactions for similarity-based routing and resolution hints",
+      "anonymization": "customer_id_hashed",
+      "metadata_filters": [
+        "intent",
+        "urgency",
+        "resolution_status"
+      ]
+    },
+    "knowledge_base_articles": {
+      "description": "Product and service support articles for technical and general agents",
+      "metadata_filters": [
+        "product_version",
+        "platform",
+        "category"
+      ]
+    }
+  },
+  "vector_store": "qdrant",
+  "chunk_overlap": 50,
+  "embedding_model": "text-embedding-3-small"
+}

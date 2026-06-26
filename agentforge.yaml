@@ -1,0 +1,23 @@
+# AgentForge manifest — do not edit manually
+apiVersion: agentforge/v1
+kind: AgentManifest
+
+metadata:
+  agentId: "5fc470b2-425a-4d55-816a-36d91d860e82"
+  agentVersionId: "10b21289-6630-4750-a765-70d5f0ae34a7"
+  slug: "customer-support-triage-system"
+  name: "Customer Support Triage System"
+
+spec:
+  runtime:
+    llmModel: "claude-3-5-sonnet"
+    environment: "kubernetes"
+  resources:
+    cpu: "0.5"
+    memory: "1Gi"
+    replicas: 2
+  healthCheck:
+    path: "/health"
+
+cost:
+  estimatedMonthlyUsd: 71.0
